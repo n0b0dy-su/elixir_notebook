@@ -83,5 +83,6 @@ list ++ [4]
 
 ### TODO
 
+> - [ ] **CONTINUE ON IF AND UNLESS**
 > - [ ] Check [Operators page](https://hexdocs.pm/elixir/operators.html)
 > - [ ] Check [Guards page](https://hexdocs.pm/elixir/patterns-and-guards.html#guards)
