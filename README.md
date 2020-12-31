@@ -195,14 +195,38 @@ The `binary-size(n)` modifier specify the number **n** of bytes to match in a bi
 
 - Multiple  byte characters in a pattern match just match the first byte, to solve this use `::utf8` modifier.
 
-```example
+```elixir
 <<x::utf8, rest::binary>> = "über"
 
 #x is equal to ""ü"
 # and the rest is "ber"
 ```
 
+#### Charlist
+
+- `""` for binaries.
+- `''` for charlists.
+- If any integer in a charlist falls outside the ASCII range IEx output the code points of the charlist.
+
+```elixir
+# Example
+'hełło'
+# returns [104, 101, 322, 322, 111], where 'ł' code point is 322, out of range 0 - 127 
+```
+
+- For integers in a list within ASCII range 0 - 127, IEx output the charlist.
+
+```elixir
+# Example
+
+[104, 101, 108, 108, 111]
+
+# Output 'hello'
+```
+
+- `<>` Use for concatenate binaries.
+- `++` Use for concatenate charlist.
+
 ### TODO
-> - [ ] continue in charlist
 > - [ ] Check [Operators page](https://hexdocs.pm/elixir/operators.html)
 > - [ ] Check [Guards page](https://hexdocs.pm/elixir/patterns-and-guards.html#guards)
