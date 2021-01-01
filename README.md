@@ -227,6 +227,168 @@ The `binary-size(n)` modifier specify the number **n** of bytes to match in a bi
 - `<>` Use for concatenate binaries.
 - `++` Use for concatenate charlist.
 
+### Keyword lists and maps
+
+#### Keword list
+
+- Are structures of key-value.
+- Have the same operators of the list.
+- The front elements are fetched on lookup.
+
+```elixir
+# Example
+
+my_list = [key: :value]
+new_list = [key: :other_value] ++ my_list
+
+# new_list has: [key: :other_value, key: :value]
+# Then
+
+new_list[:key]
+# Its equal to: :other_value, beacuse is in front 
+```
+
+> ##### Special characteristics
+>
+> - Keys must be atoms.
+> - Keys are ordered, as specified by the developer.
+> - Keys can be given more than once. 
+
+```elixir
+#Example
+
+my_list = [a: 3, a: 1, c:0]
+
+# Its a valid list
+```
+
+- If a keyword list is the last argument of a funtion, the square brackets `[]` are optional.
+
+```elixir
+# Example
+
+if true, do: :this, else: :that
+#is equivalent to 
+if(true, [do: :this, else: :that])
+
+# And returns :this
+```
+
+- To do a pattern match with keyword list requires, the number of items and the order to match.
+
+```elixir
+# Example
+
+[a: a, b: b] = [a: 1, b: 2]
+
+# a has 1 and b has 2
+```
+
+#### Maps
+
+- Its creating using `%{}`.
+- Allow any value as a key.
+- Do not follow any ordering.
+- If all keys are atoms can use keyword syntax. 
+- Acces to a non exiting key returns `nil`.
+
+```elixir
+# Example
+
+my_map = %{:a => "a", "b" => 2, 3 => 3}
+my_map[:a]
+my_map["b"]
+my_map[3]
+
+# Or if all keys ar atoms
+
+#atoms can start with numbers
+my_map = %{a: "a", b: 2, c: 3}
+# In this case map also can be acces like this:
+my_map.a
+my_map.b
+my_map.c
+```
+
+- In **pattern matching** always match with the key in the pattern exits with the given map.
+- A empty map pattern `%{}` match with any map.
+
+```elixir
+%{a: a} = %{b: :b, a: 1}
+# a returns 1
+
+%{} = %{a: :a, b: :b}
+# match with any map
+
+# But
+%{non_exist_key: nek} = %{a: "a", b: "b"}
+# returns a matchError
+```
+
+- The `Map` module provides functions to manipulate maps, like:
+
+`Map.get/2`
+`Map.put/3`
+`Map.to_list/1`
+
+- To update a map key use the following syntax.
+
+```elixir
+my_map = %{:a => 1, 2 => :b}
+new_map = %{my_map | :a => 0}
+
+# new_map has: %{:a => 0, 2 => :b}
+```
+
+### Nested data structures
+
+In case to have maps into list, list into maps, or similar structures like this
+
+```elixir
+users = [
+ n0b0dy: %{name: "n0b0dy", age: 21, likes: ["linux", "backend dev"]}
+ not_me: %{name: "idk", age: 21, likes: ["music", "coding"]}
+ ]
+```
+
+Can use `put_in/2` and `update_in/2` for manipulate the structure.
+The diferetn is `update_in/2` control how the value changes.
+
+```elixir
+# Example put_in/2
+
+users = [
+ n0b0dy: %{name: "n0b0dy", age: 21, likes: ["linux", "backend dev"]},
+ not_me: %{name: "idk", age: 21, likes: ["music", "coding"]}
+ ]
+
+put_in users[:n0b0dy].age 22
+
+# returns 
+users = [
+ n0b0dy: %{name: "n0b0dy", age: 21, likes: ["linux", "backend dev"]},
+ not_me: %{name: "idk", age: 21, likes: ["music", "coding"]}
+ ]
+```
+
+```elixir
+# Example update_in/2
+
+users = [
+ n0b0dy: %{name: "n0b0dy", age: 21, likes: ["linux", "backend dev"]},
+ not_me: %{name: "idk", age: 21, likes: ["music", "coding"]}
+ ]
+
+update_in users[:n0b0dy].likes, fn likes -> List.delete(likes, "linux") end
+
+# returns 
+users = [
+ n0b0dy: %{name: "n0b0dy", age: 21, likes: ["backend dev"]},
+ not_me: %{name: "idk", age: 21, likes: ["music", "coding"]}
+ ]
+```
+
 ### TODO
 > - [ ] Check [Operators page](https://hexdocs.pm/elixir/operators.html)
 > - [ ] Check [Guards page](https://hexdocs.pm/elixir/patterns-and-guards.html#guards)
+> - [ ] Check [Writing assertive code with Elixir](https://dashbit.co/blog/writing-assertive-code-with-elixir)
